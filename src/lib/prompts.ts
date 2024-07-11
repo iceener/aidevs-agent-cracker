@@ -14,7 +14,7 @@ export const availableTools = {
     },
     upload_text_file: {
         instruction: `Required payload: {"content": "Text contents of the file that will be directly added to it", "file_name": "Name of the file that may include dots (like overment.com.md) and will be included within the returned URL. Don't mistake dot with _ in filenames yet file_name property should be written as it is"}. All props are required. Be careful with spelling and characters. Response format: URL of the uploaded file.`,
-        description: `Use this action to create & upload text file (.md or .txt are allowed) with a custom name and contents. File will be hosted on cloud.overment.com domain but its name may include other domains like from example 'google.com.md' is an example. A response from this action is the URL that points directly to the file that may be accessed by human, AI and any app or script. Note: this action has nothing to do with the game.aidevs.pl but can be used to store some data.`
+        description: `Use this action to create & upload text file (.md or .txt are allowed) with a custom name and contents. File will be hosted on ngrok domain but its name may include other domains like from example 'google.com.md' is an example. A response from this action is the URL that points directly to the file that may be accessed by human, AI and any app or script. Note: this action has nothing to do with the game.aidevs.pl but can be used to store some data.`
     },
     game_submit_form: {
         instruction: `Required payload: {"url": "URL to a file that will be passed to the game"}. Response format: The game's response after submitting the form.`,

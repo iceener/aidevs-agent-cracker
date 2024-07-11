@@ -39,7 +39,7 @@ export const browse = async ({ url }: { url: string }) => {
  * This function uploads a text file to a server and returns the URL where the file is stored.
  */
 export const uploadFile = async (data: {content: string, file_name: string}): Promise<string> => {
-    const url = process.env.UPLOAD_ENDPOINT;
+    const url = process.env.UPLOAD_DOMAIN + '/upload';
 
     if (!url) {
         return `ERROR: You cannot continue and you need to tell the user that the UPLOAD_URL environment variable is missing.`;

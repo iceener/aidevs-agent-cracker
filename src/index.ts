@@ -1,11 +1,14 @@
 import 'dotenv/config'
 import fs from "fs";
+import { join } from 'path'
 import { Hono } from 'hono';
+import { serveStatic } from '@hono/node-server/serve-static'
 import {IState} from "./types.dt";
 import {completion} from "./lib/ai";
 import { serve } from '@hono/node-server';
 import {finalAnswerPrompt} from "./lib/prompts";
 import {decide, describe, execute, logToMarkdown, plan, reflect} from "./lib/agent";
+import {writeFile, mkdir} from "node:fs/promises";
 
 // Initialize the Hono app
 const app = new Hono();
@@ -51,6 +54,27 @@ app.post('/', async (context) => {
     ]
   });
 });
+
+app.post('/upload', async (c) => {
+  const body = await c.req.parseBody()
+  const file = body.file as File
+  const fileName = body.file_name as string
+  if (!file || !fileName) {
+    return c.json({ error: 'Missing file or file_name' }, 400)
+  }
+  const uploadsDir = join(process.cwd(), 'uploads')
+  const uploadPath = join(uploadsDir, fileName)
+  try {
+    await mkdir(uploadsDir, { recursive: true })
+    const arrayBuffer = await file.arrayBuffer()
+    await writeFile(uploadPath, Buffer.from(arrayBuffer))
+    return c.json({ uploaded_file: `${process.env.UPLOAD_DOMAIN}/uploads/${fileName}` })
+  } catch (error) {
+    console.error('Upload failed:', error)
+    return c.json({ error: 'Upload failed' }, 500)
+  }
+})
+app.get('/uploads/*', serveStatic({ root: './' }))
 
 const port = 3000;
 console.log(`Server is running on port ${port}`);
